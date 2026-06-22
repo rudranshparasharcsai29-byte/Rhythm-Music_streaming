@@ -31,6 +31,7 @@ import { CoverArt } from '@/components/cover-art';
 import { GlassCard } from '@/components/glass-card';
 import { Waveform } from '@/components/waveform';
 import { colors, gradients, shadows } from '@/constants/theme';
+import { musicService } from '@/services/music-service';
 import { usePlayerStore } from '@/store/player-store';
 import { formatTime } from '@/utils/time';
 
@@ -61,6 +62,7 @@ export function PlayerSheet() {
     closePlayer,
     cycleRepeatMode,
     setProgress,
+    setPlaybackState,
     requestSeek,
     toggleDownload,
     toggleFavorite,
@@ -82,6 +84,7 @@ export function PlayerSheet() {
       closePlayer: state.closePlayer,
       cycleRepeatMode: state.cycleRepeatMode,
       setProgress: state.setProgress,
+      setPlaybackState: state.setPlaybackState,
       requestSeek: state.requestSeek,
       toggleDownload: state.toggleDownload,
       toggleFavorite: state.toggleFavorite,
@@ -175,6 +178,38 @@ export function PlayerSheet() {
   const grooveLarge = vinylSize * 0.68;
   const grooveMedium = vinylSize * 0.45;
   const grooveSmall = vinylSize * 0.29;
+
+  const handlePlayPress = async () => {
+    if (isPlaying || !currentTrack.streamUrl) {
+      togglePlaying();
+      return;
+    }
+
+    setPlaybackState({ isBuffering: true, playbackError: null });
+
+    try {
+      const streamUrl = await musicService.getStreamUrl(currentTrack.id);
+      const state = usePlayerStore.getState();
+
+      if (state.currentTrack.id !== currentTrack.id) {
+        return;
+      }
+
+      usePlayerStore.setState({
+        currentTrack: {
+          ...state.currentTrack,
+          streamUrl,
+        },
+      });
+      state.setPlaybackState({ isBuffering: false, playbackError: null });
+      state.togglePlaying();
+    } catch (error) {
+      setPlaybackState({
+        isBuffering: false,
+        playbackError: error instanceof Error ? error.message : 'Stream URL unavailable',
+      });
+    }
+  };
 
   return (
     <Modal visible={isPlayerExpanded} transparent animationType="none" onRequestClose={closePlayer}>
@@ -294,7 +329,7 @@ export function PlayerSheet() {
                 <View className="flex-row items-center justify-between">
                   <ControlButton icon="shuffle" active={isShuffleEnabled} onPress={toggleShuffle} />
                   <ControlButton icon="play-skip-back" />
-                  <Pressable onPress={togglePlaying} style={({ pressed }) => [{ transform: [{ scale: pressed ? 0.96 : 1 }] }]}>
+                  <Pressable onPress={handlePlayPress} style={({ pressed }) => [{ transform: [{ scale: pressed ? 0.96 : 1 }] }]}>
                     <LinearGradient colors={gradients.accent} style={[styles.playButton, shadows.glow]}>
                       <Ionicons name={isPlaying ? 'pause' : 'play'} size={34} color="#fff" />
                     </LinearGradient>
