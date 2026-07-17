@@ -11,6 +11,7 @@
       "supportsTablet": true
     },
     "android": {
+      "package": "com.rudransh.rhythm",
       "adaptiveIcon": {
         "backgroundColor": "#FFF1F5",
         "foregroundImage": "./assets/images/android-icon-foreground.png",
