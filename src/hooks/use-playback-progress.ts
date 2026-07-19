@@ -83,6 +83,7 @@ export function usePlaybackProgress() {
     }
 
     if (isPlaying) {
+      player.rate = 1.0;
       player.play();
     } else {
       player.pause();
