@@ -7,18 +7,10 @@ import {
 
 import { usePlayerStore } from '@/store/player-store';
 
-const EMPTY_AUDIO =
-  'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3';
-
 export function usePlaybackProgress() {
-  const player = useAudioPlayer(
-    {
-      uri: EMPTY_AUDIO,
-    },
-    {
-      updateInterval: 1000,
-    }
-  );
+  const player = useAudioPlayer(null, {
+    updateInterval: 1000,
+  });
 
   const status = useAudioPlayerStatus(player);
 
