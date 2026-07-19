@@ -3,7 +3,7 @@ import { healthRoute } from "./routes/health";
 import { searchRoutes } from "./routes/search";
 import { streamRoutes } from "./routes/stream";
 import { authRoutes } from "./routes/auth";
-import { databasePlugin } from "./plugins/database";
+import databasePlugin from "./plugins/database";
 
 const app = Fastify();
 
