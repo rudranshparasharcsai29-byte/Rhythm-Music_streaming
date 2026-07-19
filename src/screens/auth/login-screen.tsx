@@ -53,7 +53,7 @@ export default function LoginScreen({ navigation }: { navigation: any }) {
 
   return (
     <SafeAreaView style={styles.container}>
-      <LinearGradient colors={gradients.background} style={StyleSheet.absoluteFill} />
+      <LinearGradient colors={gradients.appBackground} style={StyleSheet.absoluteFill} />
       <View style={styles.content}>
         <View style={styles.header}>
           <Text style={styles.title}>Welcome back</Text>
@@ -63,7 +63,7 @@ export default function LoginScreen({ navigation }: { navigation: any }) {
         <GlassCard className="mt-8 px-6 py-6" intense>
           {error ? (
             <View style={styles.errorContainer}>
-              <Ionicons name="alert-circle-outline" size={18} color={colors.error} />
+              <Ionicons name="alert-circle-outline" size={18} color={'#EF4444'} />
               <Text style={styles.errorText}>{error}</Text>
             </View>
           ) : null}
@@ -208,7 +208,7 @@ const styles = StyleSheet.create({
   errorText: {
     fontSize: 13,
     fontWeight: '600',
-    color: colors.error,
+    color: '#EF4444',
   },
   loginButton: {
     marginTop: 8,

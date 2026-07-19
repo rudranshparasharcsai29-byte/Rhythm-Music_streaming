@@ -21,6 +21,7 @@ export const colors = {
   glow: 'rgba(255, 178, 198, 0.55)',
   tabGlow: 'rgba(255, 107, 139, 0.22)',
   scrim: 'rgba(73, 44, 51, 0.24)',
+  error: '#EF4444',
 };
 
 export const layout = {
