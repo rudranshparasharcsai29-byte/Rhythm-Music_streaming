@@ -180,8 +180,11 @@ export function PlayerSheet() {
   const grooveSmall = vinylSize * 0.29;
 
   const handlePlayPress = async () => {
-    if (isPlaying || !currentTrack.streamUrl) {
+    if (isPlaying) {
       togglePlaying();
+      return;
+    }
+    if (!currentTrack.streamUrl) {
       return;
     }
 

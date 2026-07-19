@@ -124,7 +124,7 @@ export function usePlaybackProgress() {
       isBuffering: status.isBuffering,
       progress: status.currentTime,
       duration: status.duration || currentTrack.duration,
-      playbackError: status.error,
+      playbackError: status.error ? String(status.error) : null,
     });
   }, [
     currentTrack.duration,
