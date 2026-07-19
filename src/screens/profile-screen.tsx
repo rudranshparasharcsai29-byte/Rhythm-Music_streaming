@@ -1,13 +1,14 @@
-import { Pressable, ScrollView, Text, View } from 'react-native';
+import { Alert, Pressable, ScrollView, Text, View } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import * as SecureStore from 'expo-secure-store';
 
 import { ArtistPill } from '@/components/artist-pill';
 import { GlassCard } from '@/components/glass-card';
 import { SectionHeader } from '@/components/section-header';
 import { favoriteArtists } from '@/constants/mock-data';
-import { gradients, layout } from '@/constants/theme';
+import { colors, gradients, layout } from '@/constants/theme';
 
 const actions = [
   { icon: 'moon-outline', label: 'Sleep timer', value: 'Off for now' },
@@ -16,7 +17,26 @@ const actions = [
   { icon: 'lock-closed-outline', label: 'Private session', value: 'Enabled' },
 ] as const;
 
-export function ProfileScreen() {
+export function ProfileScreen({ navigation }: { navigation: any }) {
+  const handleLogout = () => {
+    Alert.alert(
+      'Log out',
+      'Are you sure you want to log out?',
+      [
+        { text: 'Cancel', style: 'cancel' },
+        {
+          text: 'Log out',
+          style: 'destructive',
+          onPress: async () => {
+            await SecureStore.deleteItemAsync('auth_token');
+            navigation.reset({ index: 0, routes: [{ name: 'Login' }] });
+          },
+        },
+      ],
+      { cancelable: true }
+    );
+  };
+
   return (
     <SafeAreaView className="flex-1" edges={['top']}>
       <ScrollView
@@ -78,6 +98,20 @@ export function ProfileScreen() {
               </Pressable>
             </GlassCard>
           ))}
+        </View>
+
+        <View className="px-5 pt-4 pb-2">
+          <GlassCard className="rounded-[24px] px-4 py-4" intense>
+            <Pressable className="flex-row items-center" onPress={handleLogout} style={({ pressed }) => [{ transform: [{ scale: pressed ? 0.99 : 1 }] }]}>
+              <View className="mr-3 h-11 w-11 items-center justify-center rounded-full bg-white/55">
+                <Ionicons name="log-out-outline" size={20} color="#EF4444" />
+              </View>
+              <View className="flex-1">
+                <Text className="text-[14px] font-extrabold" style={{ color: '#EF4444' }}>Log out</Text>
+              </View>
+              <Ionicons name="chevron-forward" size={18} color="#EF4444" />
+            </Pressable>
+          </GlassCard>
         </View>
       </ScrollView>
     </SafeAreaView>
